@@ -1,0 +1,16 @@
+.header-container {
+    height: 10vh;
+    color: white;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #202123;
+    width: 100%;
+}
+
+.logo {
+    font-size: 1.5rem;
+}
+
+
