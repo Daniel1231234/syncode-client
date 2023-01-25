@@ -6,15 +6,12 @@ import { ICodeBlock } from '../../models/ICodeBlock'
 import LoadingSpinner from '../UI/Spinner'
 import './LobbyPage.css'
 
-
-
 type Props = {
-  setShowBackBtn: any
-  showBackBtn:boolean
+
 }
-const LobbyPage = ({setShowBackBtn,showBackBtn}: Props) => {
+const LobbyPage = ({}: Props) => {
   const socket = useContext(WebsocketContext)
-  const { getAllBlocks, getBlockById, saveCurrBlock, getCurrBlock } = useContext(AppContext)
+  const { getAllBlocks, getBlockById, saveCurrBlock, getCurrBlock, setShowBackBtn,showBackBtn } = useContext(AppContext)
   const [totalCodeBlocs, setTotalCodeBlocks] = useState<ICodeBlock[]>([])
   const navigate = useNavigate()
 
@@ -61,7 +58,10 @@ const LobbyPage = ({setShowBackBtn,showBackBtn}: Props) => {
   }
     if (!totalCodeBlocs) return <LoadingSpinner />
   return (
-    <div className="lobbyPage-container main-layout">
+    <div className="lobbyPage-container main-layout" style={{
+      backgroundImage: `url(${"https://www.linkpicture.com/q/LPic63d1bb30ab3611761177744.jpg"})`,
+      backgroundSize:'cover'
+    }}>
       <h2 className='lobby-heading'>Choose Code Block</h2>
       <div className='block-list'>
         {totalCodeBlocs.map((block) => {

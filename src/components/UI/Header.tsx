@@ -6,10 +6,10 @@ import CustomBtn from './CustomBtn'
 import './Header.css'
 
 type Props = {
-    showBackBtn:boolean
+ 
 }
-const Header = ({showBackBtn}: Props) => {
-    const { getCurrBlock, saveCurrBlock } = useContext(AppContext)
+const Header = ({}: Props) => {
+    const { getCurrBlock, saveCurrBlock, showBackBtn } = useContext(AppContext)
      const socket = useContext(WebsocketContext);
     const navigate = useNavigate()
     const currBlock = getCurrBlock()

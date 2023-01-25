@@ -12,6 +12,8 @@ interface AppContextProp {
     getBlockById: Function;
     getCurrBlock: Function
     saveCurrBlock: Function
+    showBackBtn:boolean
+    setShowBackBtn:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AppContext = createContext<AppContextProp>({
@@ -22,12 +24,15 @@ export const AppContext = createContext<AppContextProp>({
     getBlockById: () => { },
     getCurrBlock: () => { },
     saveCurrBlock: () => { },
+    showBackBtn:false,
+    setShowBackBtn: () => {}
 });
 
 
 export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isMentor, setIsMentor] = useState(false);
     const [codeBlock, setCodeBlock] = useState<ICodeBlock | null>(null);
+    const [showBackBtn, setShowBackBtn] = useState(false)
 
     const getAllBlocks = async () => {
         try {
@@ -82,7 +87,9 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         checkIfMatch,
         getAllBlocks,
         getCurrBlock,
-        saveCurrBlock
+        saveCurrBlock,
+        showBackBtn,
+        setShowBackBtn
     };
 
     return (

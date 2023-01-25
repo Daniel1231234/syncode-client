@@ -9,12 +9,11 @@ import prizeSvg from "../../assets/prize.svg"
 import { useNavigate } from 'react-router-dom'
 
 type Props = {
-  setShowBackBtn: any
-  showBackBtn:boolean
+
 }
-const CodeBlockPage = ({setShowBackBtn, showBackBtn}: Props) => {
+const CodeBlockPage = ({}: Props) => {
   const socket = useContext(WebsocketContext);
-  const { setIsMentor, isMentor, getCurrBlock, checkIfMatch } = useContext(AppContext)
+  const { setIsMentor, isMentor, getCurrBlock, checkIfMatch, setShowBackBtn, showBackBtn } = useContext(AppContext)
   const currBlock = JSON.parse(JSON.stringify(getCurrBlock()))
   const [studentCode, setStudentCode] = useState<string>(currBlock.code)
   const [isMatch, setIsMatch] = useState(false)
@@ -22,10 +21,10 @@ const CodeBlockPage = ({setShowBackBtn, showBackBtn}: Props) => {
 
 
   useEffect(() => {
-  window.addEventListener("resize", () => {
-    setWidth(window.innerWidth);
-  });
-  }, []);
+  const handleResize = () => setWidth(window.innerWidth);
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
   
 
   useEffect(() => {

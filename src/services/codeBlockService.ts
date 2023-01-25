@@ -5,7 +5,8 @@ export const codeBlockService = {
     getById
 }
 
-const BASE_URL = import.meta.env.MODE === 'development' ? 'http://localhost:3001/api/block' : '/api/block'
+// const BASE_URL = import.meta.env.MODE === 'development' ? '//localhost:3001/api/block' : '/api/block'
+const BASE_URL = process.env.NODE_ENV !== "development" ? "/api/block" : "//localhost:3001/api/block"
 
 
 async function getTotalBlocks() {
