@@ -4,7 +4,6 @@ import { AppContext } from '../../context/AppContext'
 import { WebsocketContext } from '../../context/SocketContext'
 import { ICodeBlock } from '../../models/ICodeBlock'
 import LoadingSpinner from '../UI/Spinner'
-import bgImg from "../../assets/bg.jpg"
 import './LobbyPage.css'
 
 
@@ -60,9 +59,9 @@ const LobbyPage = ({setShowBackBtn,showBackBtn}: Props) => {
       console.log(err)
     }
   }
-    if (!bgImg || !totalCodeBlocs) return <LoadingSpinner />
+    if (!totalCodeBlocs) return <LoadingSpinner />
   return (
-    <div className="lobbyPage-container main-layout" style={{backgroundImage:`url(${bgImg})`, backgroundSize:'cover'}}>
+    <div className="lobbyPage-container main-layout">
       <h2 className='lobby-heading'>Choose Code Block</h2>
       <div className='block-list'>
         {totalCodeBlocs.map((block) => {
