@@ -1,24 +1,41 @@
-
 .lobbyPage-container {
     min-height: 90vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 20px;
 }
 
-.lobbyPage-container h2 {
+.lobby-heading {
     margin-top: 1rem;
+    font-size: 3rem;
+    font-family: system-ui;
+    text-align: center;
 }
 
 .block-list {
     display: flex;
     flex-direction: column;
-    gap:10px;
+    gap: 10px;
     margin-top: 1rem;
     font-family: monospace;
+    text-align: center;
+    opacity: .9;
+    background-color: black;
+    padding: 3rem;
+    border-radius: 42px;
 }
 
-.block-list > div {
+.block-list>div {
     cursor: pointer;
+    padding: 10px;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease-in-out;
 }
 
+.block-list>div:hover {
+    transform: scale(1.1);
+    background-color: rgb(222, 216, 131);
+    border-radius: 5px;
+    color: black;
+}

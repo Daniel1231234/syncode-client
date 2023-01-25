@@ -2,56 +2,57 @@ import './CodeBlockPage.css'
 import { useState } from 'react'
 import { useContext } from 'react'
 import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext'
-import { ICodeBlock } from '../../models/ICodeBlock'
 import AceEditor from 'react-ace'
-import {  WebsocketContext } from '../../context/SocketContext'
-import { socketService } from '../../services/socketService'
+import { WebsocketContext } from '../../context/SocketContext'
+import prizeSvg from "../../assets/prize.svg"
+import { useNavigate } from 'react-router-dom'
 
-type Props = {}
-const CodeBlockPage = (props: Props) => {
+type Props = {
+  setShowBackBtn: any
+  showBackBtn:boolean
+}
+const CodeBlockPage = ({setShowBackBtn, showBackBtn}: Props) => {
   const socket = useContext(WebsocketContext);
-  const { setIsMentor, isMentor, codeBlock, getCurrBlock} = useContext(AppContext)
+  const { setIsMentor, isMentor, getCurrBlock, checkIfMatch } = useContext(AppContext)
   const currBlock = JSON.parse(JSON.stringify(getCurrBlock()))
   const [studentCode, setStudentCode] = useState<string>(currBlock.code)
-  const [connectedUsers, setConnectedUsers] = useState(null);
+  const [isMatch, setIsMatch] = useState(false)
+  const [width, setWidth] = useState(window.innerWidth);
+
+
+  useEffect(() => {
+  window.addEventListener("resize", () => {
+    setWidth(window.innerWidth);
+  });
+  }, []);
+  
+
+  useEffect(() => {
+    setShowBackBtn(true)
+  }, [showBackBtn])
+
 
   useEffect(() => {
     if (!socket) return
     socket.on('joined_users', (data: any) => {
       const { joinedUsers } = data
       if (joinedUsers === 1) setIsMentor(true)
-      else if (joinedUsers === 2) setIsMentor(false)
       console.log(joinedUsers)
-
     })
-    
+
     return () => {
       socket.off('joined_users')
     }
-    }, [socket])
-  // useEffect(() => {
-  //   if (!socket) return
-  //   socket.on('joined_users', (data: any) => {
-  //     console.log(data.joinedUsers)
-  //     setConnectedUsers(data.joinedUsers)
-  //     data.joinedUsers === 1 ? setIsMentor(true) : setIsMentor(false)
-  //   })
-    
-  //   return () => {
-  //     socket.off('joined_users')
-  //   }
-  //   }, [socket, connectedUsers])
-  
+  }, [socket, isMentor, currBlock])
+
+
   useEffect(() => {
     if (!socket) return
     socket.on('code_updated', (data: any) => {
-      // console.log(data.code, ' code_updated')
       setStudentCode(data.code)
-      // console.log(studentCode)
     })
-    
+
     return () => {
       socket.off('code_updated')
     }
@@ -59,44 +60,59 @@ const CodeBlockPage = (props: Props) => {
 
 
 
-  
+
   const onCodeChange = (val: string) => {
     setStudentCode(val)
     const updatedCode = JSON.parse(JSON.stringify(val))
-    socket.emit('update_code', {code: updatedCode})
+    socket.emit('update_code', { code: updatedCode })
   }
-  
+
   const onCheckAnswer = () => {
     const updatedCodeBlock = Object.assign({}, currBlock, { code: studentCode })
-    console.log(updatedCodeBlock)
+    // console.log(updatedCodeBlock)
+    const solution = updatedCodeBlock.solution
+    const isMatch = checkIfMatch(studentCode, solution)
+    setIsMatch(isMatch)
 
   }
 
+  const editorWidth = width < 700 ? "300px" : "400px";
+
+  if (isMatch) return <div className='centerDiv'>
+    <img src={prizeSvg} style={{ width: '100%' }} />
+    <h3 style={{textAlign:'center', fontSize:'2rem'}}>You did it!</h3>
+  </div>
 
   return (
     <div className='main-layout codeblock-page'>
       <h2>{currBlock?.title}</h2>
-      <div>{currBlock?.problem }</div>
-      <div className='editor-wrapper'>
-        <AceEditor className='editor'
-          mode="javascript"
-          theme="monokai"
-          onChange={onCodeChange}
-          setOptions={{ useWorker: false }}
-          value={studentCode || ''}
-          highlightActiveLine={true}
-          enableLiveAutocompletion={true}
-          fontSize={12}
-          height="400px"
-          width="400px"
-          readOnly={isMentor}
-          />
-      </div>
-      <div className='button-group'>
+      <div className='code-block-content'>
+        <div className='left-container'>
+         <p  className='challenge-desc'>{currBlock?.problem}</p> 
         <button onClick={onCheckAnswer} className='code-submit-btn'>Check my answer!</button>
+        </div>
+        <div className='editor-wrapper'>
+          <AceEditor className='editor'
+            mode="javascript"
+            theme="monokai"
+            onChange={onCodeChange}
+            setOptions={{ useWorker: false }}
+            value={studentCode || ''}
+            highlightActiveLine={true}
+            enableLiveAutocompletion={true}
+            debounceChangePeriod={300}
+            fontSize={12}
+            height="400px"
+            width={editorWidth}
+            readOnly={isMentor}
+          />
+          </div>
       </div>
     </div>
   )
 }
 
 export default CodeBlockPage
+
+
+

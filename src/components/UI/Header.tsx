@@ -5,8 +5,10 @@ import { WebsocketContext } from '../../context/SocketContext'
 import CustomBtn from './CustomBtn'
 import './Header.css'
 
-type Props = {}
-const Header = (props: Props) => {
+type Props = {
+    showBackBtn:boolean
+}
+const Header = ({showBackBtn}: Props) => {
     const { getCurrBlock, saveCurrBlock } = useContext(AppContext)
      const socket = useContext(WebsocketContext);
     const navigate = useNavigate()
@@ -24,7 +26,7 @@ const Header = (props: Props) => {
             <div className="header">
                 <div className="logo">Sync<span>Code</span></div>
             </div>
-            <CustomBtn title='Back' onAction={leaveRoom} />
+            {showBackBtn && <CustomBtn title='Back' onAction={leaveRoom} />}
         </div>
     )
 }

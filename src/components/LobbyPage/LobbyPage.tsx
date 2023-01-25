@@ -4,19 +4,37 @@ import { AppContext } from '../../context/AppContext'
 import { WebsocketContext } from '../../context/SocketContext'
 import { ICodeBlock } from '../../models/ICodeBlock'
 import LoadingSpinner from '../UI/Spinner'
+import bgImg from "../../assets/bg.jpg"
 import './LobbyPage.css'
 
 
 
-type Props = {}
-const LobbyPage = (props: Props) => {
-  const {getAllBlocks, getBlockById, saveCurrBlock} = useContext(AppContext)
+type Props = {
+  setShowBackBtn: any
+  showBackBtn:boolean
+}
+const LobbyPage = ({setShowBackBtn,showBackBtn}: Props) => {
+  const socket = useContext(WebsocketContext)
+  const { getAllBlocks, getBlockById, saveCurrBlock, getCurrBlock } = useContext(AppContext)
   const [totalCodeBlocs, setTotalCodeBlocks] = useState<ICodeBlock[]>([])
   const navigate = useNavigate()
-  const socket = useContext(WebsocketContext)
+
+    useEffect(() => {
+    setShowBackBtn(false)
+  }, [showBackBtn])
 
 
-  
+  useEffect(() => {
+    const currBlock = getCurrBlock()
+    if (currBlock) {
+      saveCurrBlock(null)
+      socket.emit('leave_room', currBlock?.title)
+    }
+
+    return () => {
+      socket.off('leave_room')
+    }
+  }, [])
 
   useEffect(() => {
     const loadCodeBlocks = async () => {
@@ -28,7 +46,7 @@ const LobbyPage = (props: Props) => {
       }
     }
 
-      loadCodeBlocks()
+    loadCodeBlocks()
   }, [])
 
   const goToCodeBlock = async (e: React.MouseEvent<HTMLElement>) => {
@@ -37,16 +55,15 @@ const LobbyPage = (props: Props) => {
       const chosenBlock = await getBlockById(blockId)
       saveCurrBlock(chosenBlock)
       socket.emit('join_room', chosenBlock.title)
-      navigate(`/blocks/${blockId}`)
+      navigate(`/blocks/${blockId}`, {replace:true})
     } catch (err) {
       console.log(err)
+    }
   }
-  }
-
-  if (!totalCodeBlocs) return <LoadingSpinner />
+    if (!bgImg || !totalCodeBlocs) return <LoadingSpinner />
   return (
-    <div className="lobbyPage-container main-layout">
-      <h2>Choose code block</h2>
+    <div className="lobbyPage-container main-layout" style={{backgroundImage:`url(${bgImg})`, backgroundSize:'cover'}}>
+      <h2 className='lobby-heading'>Choose Code Block</h2>
       <div className='block-list'>
         {totalCodeBlocs.map((block) => {
           return <div

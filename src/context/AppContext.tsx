@@ -1,5 +1,5 @@
 import axios from 'axios';
-import  React, {createContext, useContext, useState} from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { ICodeBlock } from '../models/ICodeBlock';
 import { codeBlockService } from '../services/codeBlockService';
@@ -7,28 +7,20 @@ import { codeBlockService } from '../services/codeBlockService';
 interface AppContextProp {
     isMentor: boolean
     setIsMentor: React.Dispatch<React.SetStateAction<boolean>>;
-    codeBlock: ICodeBlock | null;
-    solution: string;
-    setSolution: React.Dispatch<React.SetStateAction<string>>;
-    isMatch: boolean;
-    setIsMatch: React.Dispatch<React.SetStateAction<boolean>>;
+    checkIfMatch:Function
     getAllBlocks: Function;
     getBlockById: Function;
-    getCurrBlock:Function
-    saveCurrBlock:Function
+    getCurrBlock: Function
+    saveCurrBlock: Function
 }
 
 export const AppContext = createContext<AppContextProp>({
     isMentor: false,
     setIsMentor: () => { },
-    codeBlock: null,
-    solution: "",
-    setSolution: () => { },
-    isMatch: false,
-    setIsMatch: () => { },
-    getAllBlocks:() => {},
+    checkIfMatch:() => {},
+    getAllBlocks: () => { },
     getBlockById: () => { },
-    getCurrBlock:() => {},
+    getCurrBlock: () => { },
     saveCurrBlock: () => { },
 });
 
@@ -36,13 +28,10 @@ export const AppContext = createContext<AppContextProp>({
 export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isMentor, setIsMentor] = useState(false);
     const [codeBlock, setCodeBlock] = useState<ICodeBlock | null>(null);
-    const [solution, setSolution] = useState('');
-    const [isMatch, setIsMatch] = useState(false)
-
 
     const getAllBlocks = async () => {
         try {
-            const blocks:ICodeBlock[] = await codeBlockService.getTotalBlocks()
+            const blocks: ICodeBlock[] = await codeBlockService.getTotalBlocks()
             return blocks
         } catch (err) {
             console.log(err)
@@ -56,12 +45,12 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         return block
     }
 
-    const saveCurrBlock = (codeBlock:ICodeBlock | null) => {
+    const saveCurrBlock = (codeBlock: ICodeBlock | null) => {
         setCodeBlock(codeBlock)
         localStorage.setItem('codeBlock', JSON.stringify(codeBlock))
     }
 
-    const getBlockById = async (blockId:string) => {
+    const getBlockById = async (blockId: string) => {
         try {
             const chosenBlock = await codeBlockService.getById(blockId)
             return chosenBlock
@@ -70,16 +59,27 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         }
     }
 
+    const checkIfMatch = (updatedCode: string, solution: string) => {
+        const userSolution = getAnswer(updatedCode)
+        console.log(userSolution)
+        if (userSolution?.toLowerCase() === solution.toLowerCase()) return true
+        else return false
+    }
+
+    function getAnswer(string:String) {
+    let match = string.match(/results:([\s\S]*)/);
+    if (match) {
+        return match[1].trim();
+    }
+    return null;
+}
+
 
     const value = {
         isMentor,
         setIsMentor,
-        codeBlock,
         getBlockById,
-        solution,
-        setSolution,
-        isMatch,
-        setIsMatch, 
+        checkIfMatch,
         getAllBlocks,
         getCurrBlock,
         saveCurrBlock

@@ -1,22 +1,21 @@
 .customBtn {
-    display: inline-block;
+    /* display: inline-block; */
     outline: none;
     cursor: pointer;
     font-weight: 500;
     border: 1px solid transparent;
     border-radius: 2px;
-    height: 36px;
+    height: 30px;
     font-size: 14px;
+    font-family: system-ui;
     color: #ffffff;
-    background-color: #007c89;
+    background-color: #ff0000;
     transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
     padding: 0 18px;
 }
 
 .customBtn:hover {
     color: #ffffff;
-    background-color: #006570;
+    background-color: #cc0000;
 }
-
-
 

@@ -8,13 +8,16 @@
     }
 }
 
+
 .loading-spinner {
+    position: absolute;
     width: 50px;
+    top: 50%;
     height: 50px;
+    transform: translate(-50%, -50%);
     border: 10px solid #f3f3f3;
-    /* Light grey */
+    left: 50%;
     border-top: 10px solid #383636;
-    /* Black */
     border-radius: 50%;
     animation: spinner 1.5s linear infinite;
 }
