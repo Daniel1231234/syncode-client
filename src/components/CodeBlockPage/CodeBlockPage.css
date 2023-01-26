@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap:1rem;
+    gap: 1rem;
 }
 
 .codeblock-page h2 {
@@ -11,17 +11,16 @@
     margin: 1rem auto;
 }
 
-
-.editor-wrapper {
-    max-width: 100%;
-    margin: auto;
+.code-block-content {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: auto;
+    gap: 2rem;
 }
 
-
+.left-container {
+    display: flex;
+    justify-content: space-evenly;
+        flex-direction: column;
+}
 
 .code-submit-btn {
     outline: none;
@@ -35,16 +34,23 @@
     background-color: #007c89;
     transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
     padding: 0 18px;
-
 }
 
 .code-submit-btn:hover {
-        color: #ffffff;
-            background-color: #006570;
+    color: #ffffff;
+        background-color: #006570;
 }
 
+.right-container {
+    max-width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
 
-.centerDiv {
+.prize-wrapper {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -57,46 +63,24 @@
 }
 
 
-.code-block-content {
-    display: flex;
-    gap: 2rem;
-}
 
-
-
-.challenge-desc {
-    line-height: 3rem;
-    font-size: 1.4rem;
-    text-align: center;
-}
-
-.left-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-}
 
 @media screen and (max-width:550px) {
     .code-block-content {
         flex-direction: column;
     }
 
-    .challenge-desc {
-        font-size: 1.3rem;
-    }
 
     .code-submit-btn {
         position: fixed;
         bottom: 10px;
         z-index: 999;
         right: 1rem;
-        line-height: 25px;
-        padding: 1rem;
-        font-size: 1rem;
+        font-size: 20px;
         border-radius: 15px;
     }
 
-    .editor-wrapper {
+        .right-container {
         margin-block-end: 30px;
     }
 }

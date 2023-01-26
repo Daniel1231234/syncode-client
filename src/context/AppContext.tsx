@@ -5,8 +5,6 @@ import { ICodeBlock } from '../models/ICodeBlock';
 import { codeBlockService } from '../services/codeBlockService';
 
 interface AppContextProp {
-    isMentor: boolean
-    setIsMentor: React.Dispatch<React.SetStateAction<boolean>>;
     checkIfMatch:Function
     getAllBlocks: Function;
     getBlockById: Function;
@@ -17,8 +15,6 @@ interface AppContextProp {
 }
 
 export const AppContext = createContext<AppContextProp>({
-    isMentor: false,
-    setIsMentor: () => { },
     checkIfMatch:() => {},
     getAllBlocks: () => { },
     getBlockById: () => { },
@@ -30,7 +26,6 @@ export const AppContext = createContext<AppContextProp>({
 
 
 export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [isMentor, setIsMentor] = useState(false);
     const [codeBlock, setCodeBlock] = useState<ICodeBlock | null>(null);
     const [showBackBtn, setShowBackBtn] = useState(false)
 
@@ -44,14 +39,20 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
 
     const getCurrBlock = () => {
-        const json = localStorage.getItem('codeBlock')
-        if (!json || json.length === 0) return null
-        const block = JSON.parse(json)
-        return block
+        try {
+            const json = localStorage.getItem('codeBlock')
+            if (!json || json.length === 0) return null
+            const block = JSON.parse(json)
+            return block
+        } catch (err) {
+            console.log(err, ' in getCurrBlock')
+            throw err
+        }
     }
 
     const saveCurrBlock = (codeBlock: ICodeBlock | null) => {
         setCodeBlock(codeBlock)
+        codeBlock === null ? localStorage.removeItem('codeBlock') : 
         localStorage.setItem('codeBlock', JSON.stringify(codeBlock))
     }
 
@@ -60,7 +61,8 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             const chosenBlock = await codeBlockService.getById(blockId)
             return chosenBlock
         } catch (err) {
-            console.log(err)
+            console.log(err, ' in getBlockByid!')
+            throw err
         }
     }
 
@@ -81,8 +83,6 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
 
     const value = {
-        isMentor,
-        setIsMentor,
         getBlockById,
         checkIfMatch,
         getAllBlocks,

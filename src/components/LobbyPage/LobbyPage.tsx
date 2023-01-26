@@ -6,10 +6,8 @@ import { ICodeBlock } from '../../models/ICodeBlock'
 import LoadingSpinner from '../UI/Spinner'
 import './LobbyPage.css'
 
-type Props = {
 
-}
-const LobbyPage = ({}: Props) => {
+const LobbyPage = () => {
   const socket = useContext(WebsocketContext)
   const { getAllBlocks, getBlockById, saveCurrBlock, getCurrBlock, setShowBackBtn,showBackBtn } = useContext(AppContext)
   const [totalCodeBlocs, setTotalCodeBlocks] = useState<ICodeBlock[]>([])

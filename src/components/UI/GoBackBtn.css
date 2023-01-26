@@ -1,5 +1,4 @@
-.customBtn {
-    /* display: inline-block; */
+.goback-btn {
     outline: none;
     cursor: pointer;
     font-weight: 500;
@@ -9,13 +8,11 @@
     font-size: 14px;
     font-family: system-ui;
     color: #ffffff;
-    background-color: #ff0000;
+    background-color: #008060;
     transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
     padding: 0 18px;
 }
 
-.customBtn:hover {
-    color: #ffffff;
-    background-color: #cc0000;
+.goback-btn:hover {
+    background-color: #006e52;
 }
-

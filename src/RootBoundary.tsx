@@ -1,6 +1,6 @@
 import { isRouteErrorResponse, useRouteError } from "react-router-dom";
 
-function RootBoundary() {
+function RootBoundary(): JSX.Element {
   const error = useRouteError();
 
   if (isRouteErrorResponse(error)) {

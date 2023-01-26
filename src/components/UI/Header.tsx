@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext'
 import { WebsocketContext } from '../../context/SocketContext'
-import CustomBtn from './CustomBtn'
+import GoBackBtn from './GoBackBtn'
 import './Header.css'
 
 type Props = {
@@ -14,7 +14,7 @@ const Header = ({}: Props) => {
     const navigate = useNavigate()
     const currBlock = getCurrBlock()
     
-    const leaveRoom = () => {
+    const leaveRoom = () => {        
         socket.emit('leave_room', currBlock?.title)
         saveCurrBlock(null)
         navigate('/')
@@ -26,7 +26,7 @@ const Header = ({}: Props) => {
             <div className="header">
                 <div className="logo">Sync<span>Code</span></div>
             </div>
-            {showBackBtn && <CustomBtn title='Back' onAction={leaveRoom} />}
+            {showBackBtn && <GoBackBtn title='Back' onAction={leaveRoom} />}
         </div>
     )
 }
