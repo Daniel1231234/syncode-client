@@ -5,31 +5,24 @@ import { useEffect } from 'react'
 import { AppContext } from '../../context/AppContext'
 import AceEditor from 'react-ace'
 import { WebsocketContext } from '../../context/SocketContext'
-import prizeSvg from "../../assets/prize.svg"
 import ErrorModal, { IModalProps } from '../UI/Modal'
 import { ICodeBlock } from '../../models/ICodeBlock'
+import Prize from './Prize'
 
 
 // This component is the page where the student can interact with the code block.
 // It uses the useState, useContext, and useEffect hooks from React to update the state,
 // handle context and manage side effects respectively
-const CodeBlockPage:React.FC = () => {
+const CodeBlockPage: React.FC = () => {
   const socket = useContext(WebsocketContext);
   const { getCurrBlock, checkIfMatch, setShowBackBtn } = useContext(AppContext)
-  // get the current block and make a deep copy so that we don't update the original object
-  const currBlock:ICodeBlock = JSON.parse(JSON.stringify(getCurrBlock()))
-  // useState hook to keep track of student's code
+  const currBlock: ICodeBlock = JSON.parse(JSON.stringify(getCurrBlock()))
   const [studentCode, setStudentCode] = useState<string>(currBlock.code)
   const [isMatch, setIsMatch] = useState(false)
-  // set the state for the width of the window
   const [width, setWidth] = useState(window.innerWidth);
-  //set the connected users state
   const [connectedUsers, setConnectedUsers] = useState<string[] | []>([])
-  // set the state for the current mentor
   const [mentor, setMentor] = useState<string | undefined>()
-  // set the state for incorrect answer
   const [wrongSolution, setWrongSolution] = useState<IModalProps | null>(null)
-  // set the state for revealing the solution
   const [revealAnswer, setRevealAnswer] = useState(false)
 
   // useEffect to handle window resizing
@@ -60,9 +53,7 @@ const CodeBlockPage:React.FC = () => {
 
   useEffect(() => {
     if (!socket) return
-    // listen to 'code_updated' event from the websocket
     socket.on('code_updated', (data: string) => {
-      // update the student code state with the new code data
       setStudentCode(data)
     })
     // clean up function to remove the event listener when component unmounts
@@ -88,19 +79,13 @@ const CodeBlockPage:React.FC = () => {
     const isMatch = checkIfMatch(studentCode, solution)
     if (!isMatch) {
       // open err modal
-      setWrongSolution({title:'Wrong answer', message:'Please Try again...'})
+      setWrongSolution({ title: 'Wrong answer', message: 'Please Try again...' })
     }
     setIsMatch(isMatch)
   }
 
-  const editorWidth = width < 700 ? "300px" : "400px";
 
-  if (isMatch) return <div className='prize-wrapper'>
-    <img src={prizeSvg} style={{ width: '100%' }} />
-    <h3 style={{ textAlign: 'center', fontSize: '2rem' }}>You did it!</h3>
-  </div>
-
-  
+  if (isMatch) return <Prize />
   return (
     <div className='main-layout codeblock-page'>
       {wrongSolution && <ErrorModal
@@ -110,14 +95,22 @@ const CodeBlockPage:React.FC = () => {
       <h2>{currBlock?.title}</h2>
       <div className='code-block-content'>
         <div className='left-container'>
-          <p style={{ color: 'rgb(153, 217, 234)', textAlign:'center' }}>{mentor ? 'Readonly mode' : 'Editable mode'}</p>
+          <p style={{ color: 'rgb(153, 217, 234)', textAlign: 'center' }}>{mentor ? 'Readonly mode' : 'Editable mode'}</p>
           <p className='challenge-desc'>{currBlock?.problem}</p>
           <button onClick={onCheckAnswer} className='code-submit-btn'>Submit</button>
-          <button className='reveal-answer-btn' onClick={() => setRevealAnswer(!revealAnswer)}>{!revealAnswer ? 'Reavel ' : 'Hide ' }Solution</button>
-          {revealAnswer && <p style={{textAlign:'center'}}>{ currBlock?.solution}</p>}
+          <button className='reveal-answer-btn' onClick={() => setRevealAnswer(!revealAnswer)}>{!revealAnswer ? 'Reveal ' : 'Hide '}Solution</button>
+          {revealAnswer && <AceEditor mode="javascript"
+            theme="monokai"
+            onChange={onCodeChange}
+            setOptions={{ useWorker: false }}
+            value={currBlock?.solution || ''}
+            fontSize={12}
+            height="400px"
+            width={width < 700 ? "300px" : "400px"}
+            readOnly />}
         </div>
         <div className='right-container'>
-          <AceEditor 
+          <AceEditor
             mode="javascript"
             theme="monokai"
             onChange={onCodeChange}
@@ -128,7 +121,7 @@ const CodeBlockPage:React.FC = () => {
             debounceChangePeriod={300}
             fontSize={12}
             height="400px"
-            width={editorWidth}
+            width={width < 700 ? "300px" : "400px"}
             readOnly={mentor ? true : false}
           />
         </div>

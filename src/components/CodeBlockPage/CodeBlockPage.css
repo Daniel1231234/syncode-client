@@ -20,13 +20,14 @@
 .left-container {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1.5rem;
-    }
-    
-    .challenge-desc {
-        text-align: center;
-        font-size: 1.5rem;
-        line-height: 30px;
+}
+
+.challenge-desc {
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 30px;
 }
 
 .code-submit-btn {
@@ -66,12 +67,11 @@
     background: 0 0;
     color: #ff4742;
 }
+
 .right-container {
     max-width: 100%;
-    margin: auto;
     display: flex;
     justify-content: center;
-    align-items: center;
     height: auto;
 }
 
@@ -108,8 +108,9 @@
         .right-container {
         margin-block-end: 30px;
     }
-.challenge-desc {
-    font-size: 1.1rem;
-    line-height: 25px;
-}
+
+        .challenge-desc {
+            font-size: 1.1rem;
+            line-height: 25px;
+        }
 }

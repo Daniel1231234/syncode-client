@@ -72,19 +72,13 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
     // function to compare the user's solution to the correct solution
     const checkIfMatch = (updatedCode: string, solution: string) => {
-        const userSolution = getAnswer(updatedCode)
-        if (userSolution?.toLowerCase() === solution.toLowerCase()) return true
+        if (
+            updatedCode.toLowerCase().replace(/\s/g, '') ===
+            solution.toLowerCase().replace(/\s/g, '')
+        ) return true
         else return false
     }
 
-    // Helper function to get the user's solution from the code string
-    function getAnswer(string: String) {
-        let match = string.match(/results:([\s\S]*)/);
-        if (match) {
-            return match[1].trim();
-        }
-        return null;
-    }
 
     // define the context value to be passed to the children
     const value = {
