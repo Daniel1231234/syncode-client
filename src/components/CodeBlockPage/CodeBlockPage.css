@@ -9,6 +9,7 @@
 .codeblock-page h2 {
     font-size: 2rem;
     margin: 1rem auto;
+    text-align: center;
 }
 
 .code-block-content {
@@ -18,8 +19,14 @@
 
 .left-container {
     display: flex;
-    justify-content: space-evenly;
-        flex-direction: column;
+    flex-direction: column;
+    gap: 1.5rem;
+    }
+    
+    .challenge-desc {
+        text-align: center;
+        font-size: 1.5rem;
+        line-height: 30px;
 }
 
 .code-submit-btn {
@@ -38,9 +45,27 @@
 
 .code-submit-btn:hover {
     color: #ffffff;
-        background-color: #006570;
+    background-color: #006570;
 }
 
+.reveal-answer-btn {
+    display: inline-block;
+    outline: 0;
+    cursor: pointer;
+    border-radius: 6px;
+    border: 2px solid #ff4742;
+    color: #fff;
+    background-color: #ff4742;
+    width: 8rem;
+    margin: 0 auto;
+}
+
+
+
+.reveal-answer-btn:hover {
+    background: 0 0;
+    color: #ff4742;
+}
 .right-container {
     max-width: 100%;
     margin: auto;
@@ -76,11 +101,15 @@
         bottom: 10px;
         z-index: 999;
         right: 1rem;
-        font-size: 20px;
+        font-size: 15px;
         border-radius: 15px;
     }
 
         .right-container {
         margin-block-end: 30px;
     }
+.challenge-desc {
+    font-size: 1.1rem;
+    line-height: 25px;
+}
 }

@@ -2,7 +2,7 @@ import axios from "axios"
 
 export const codeBlockService = {
     getTotalBlocks,
-    getById
+    getById,
 }
 
 const BASE_URL = process.env.NODE_ENV !== "development" ? "/api/block" : "//localhost:3001/api/block"
@@ -25,3 +25,5 @@ async function getById(blockId:string) {
         console.log(err)
     }
 }
+
+

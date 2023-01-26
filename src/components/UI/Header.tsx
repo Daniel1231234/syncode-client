@@ -5,12 +5,10 @@ import { WebsocketContext } from '../../context/SocketContext'
 import GoBackBtn from './GoBackBtn'
 import './Header.css'
 
-type Props = {
- 
-}
-const Header = ({}: Props) => {
+
+const Header = () => {
     const { getCurrBlock, saveCurrBlock, showBackBtn } = useContext(AppContext)
-     const socket = useContext(WebsocketContext);
+    const socket = useContext(WebsocketContext);
     const navigate = useNavigate()
     const currBlock = getCurrBlock()
     

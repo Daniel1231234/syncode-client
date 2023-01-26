@@ -5,23 +5,23 @@ import { ICodeBlock } from '../models/ICodeBlock';
 import { codeBlockService } from '../services/codeBlockService';
 
 interface AppContextProp {
-    checkIfMatch:Function
+    checkIfMatch: Function
     getAllBlocks: Function;
     getBlockById: Function;
     getCurrBlock: Function
     saveCurrBlock: Function
-    showBackBtn:boolean
-    setShowBackBtn:React.Dispatch<React.SetStateAction<boolean>>;
+    showBackBtn: boolean
+    setShowBackBtn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AppContext = createContext<AppContextProp>({
-    checkIfMatch:() => {},
+    checkIfMatch: () => { },
     getAllBlocks: () => { },
     getBlockById: () => { },
     getCurrBlock: () => { },
     saveCurrBlock: () => { },
-    showBackBtn:false,
-    setShowBackBtn: () => {}
+    showBackBtn: false,
+    setShowBackBtn: () => { },
 });
 
 
@@ -29,6 +29,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const [codeBlock, setCodeBlock] = useState<ICodeBlock | null>(null);
     const [showBackBtn, setShowBackBtn] = useState(false)
 
+    // async function to fetch all code blocks from the API
     const getAllBlocks = async () => {
         try {
             const blocks: ICodeBlock[] = await codeBlockService.getTotalBlocks()
@@ -38,6 +39,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         }
     }
 
+    // function to get the current code block from local storage
     const getCurrBlock = () => {
         try {
             const json = localStorage.getItem('codeBlock')
@@ -50,12 +52,14 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         }
     }
 
+    // function to save the current code block to local storage
     const saveCurrBlock = (codeBlock: ICodeBlock | null) => {
         setCodeBlock(codeBlock)
-        codeBlock === null ? localStorage.removeItem('codeBlock') : 
-        localStorage.setItem('codeBlock', JSON.stringify(codeBlock))
+        codeBlock === null ? localStorage.removeItem('codeBlock') :
+            localStorage.setItem('codeBlock', JSON.stringify(codeBlock))
     }
 
+    // async function to get a code block by ID from the API
     const getBlockById = async (blockId: string) => {
         try {
             const chosenBlock = await codeBlockService.getById(blockId)
@@ -66,22 +70,23 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         }
     }
 
+    // function to compare the user's solution to the correct solution
     const checkIfMatch = (updatedCode: string, solution: string) => {
         const userSolution = getAnswer(updatedCode)
-        console.log(userSolution)
         if (userSolution?.toLowerCase() === solution.toLowerCase()) return true
         else return false
     }
 
-    function getAnswer(string:String) {
-    let match = string.match(/results:([\s\S]*)/);
-    if (match) {
-        return match[1].trim();
+    // Helper function to get the user's solution from the code string
+    function getAnswer(string: String) {
+        let match = string.match(/results:([\s\S]*)/);
+        if (match) {
+            return match[1].trim();
+        }
+        return null;
     }
-    return null;
-}
 
-
+    // define the context value to be passed to the children
     const value = {
         getBlockById,
         checkIfMatch,
@@ -89,7 +94,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         getCurrBlock,
         saveCurrBlock,
         showBackBtn,
-        setShowBackBtn
+        setShowBackBtn,
     };
 
     return (
