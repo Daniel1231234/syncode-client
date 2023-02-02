@@ -8,8 +8,8 @@ export const AppRouter = () => {
         <>
             <Header />
             <Routes>
-                <Route path="/" element={<LobbyPage />} />
                 <Route path="/blocks/:blockId" element={<CodeBlockPage />} />
+                <Route path="/" element={<LobbyPage />} />
                 <Route path='*' element={<Navigate to='/' replace />} />
             </Routes>
         </>

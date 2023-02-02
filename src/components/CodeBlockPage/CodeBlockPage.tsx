@@ -27,7 +27,7 @@ const CodeBlockPage: React.FC = () => {
 
   // useEffect to handle window resizing
   useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
+    const handleResize = () :void => setWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -40,15 +40,18 @@ const CodeBlockPage: React.FC = () => {
     setShowBackBtn(true)
     if (!socket) return
     socket.on('joined_users', (data: string[] | []) => {
+      
       if (data) setConnectedUsers(data)
-      if (data.length === 1) setMentor(data[0])
+      if (data.length === 1) {
+        setMentor(data[0])
+      }
     })
 
     // cleanup function to remove the event listener when component unmounts
     return () => {
       socket.off('joined_users')
     }
-  }, [socket, connectedUsers])
+  }, [socket, connectedUsers, mentor])
 
 
   useEffect(() => {
@@ -68,7 +71,7 @@ const CodeBlockPage: React.FC = () => {
   const onCodeChange = (val: string) => {
     setStudentCode(val)
     const updatedCode = JSON.parse(JSON.stringify(val))
-    const data = { updatedCode, currBlock }
+    const data = { updatedCode, currBlock:currBlock.title }
     socket.emit('update_code', data)
   }
 

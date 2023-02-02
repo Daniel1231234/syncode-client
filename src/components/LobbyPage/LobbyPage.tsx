@@ -24,6 +24,7 @@ const LobbyPage: React.FC = () => {
         setTotalCodeBlocks(codeBlocks)
       } catch (err) {
         console.log(err)
+        throw err
       }
     }
     // call loadCodeBlocks function to fetch code blocks
@@ -39,6 +40,7 @@ const LobbyPage: React.FC = () => {
       const blockId = (e.target as HTMLElement).id
       // fetch the block data by id
       const chosenBlock = await getBlockById(blockId)
+      if (!chosenBlock) return console.error("no chosen block!")
       // save the chosen block to the current block state and local storage
       saveCurrBlock(chosenBlock)
       // emit 'join_room' event to the socket with the title of the block
@@ -47,6 +49,7 @@ const LobbyPage: React.FC = () => {
       navigate(`/blocks/${blockId}`, { replace: true })
     } catch (err) {
       console.log(err)
+      throw err
     }
   }
 

@@ -25,3 +25,4 @@ function RootBoundary(): JSX.Element {
 }
 
 export default RootBoundary
+
